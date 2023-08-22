@@ -19,10 +19,7 @@ export class FawryController {
   }
   @Get('/callback')
   callBack(@Query() query) {
-    this.eventEmitter.emit(
-      'fawry.callback',
-      new FawryCallbackEvent({ payLoad: query }),
-    );
+    this.eventEmitter.emit('fawry.callback', new FawryCallbackEvent(query));
     return query;
   }
   @Post('/callback')
