@@ -25,13 +25,13 @@ export interface User {
 }
 
 export interface CreatePaymentLinkDTO {
-  price: number;
+  price: string;
   merchantRefNumber: any;
   user: User;
 }
 
 export class CreateDummyPaymentLinkDTO {
-  price: number;
+  price: string;
   merchantRefNumber: any;
 }
 
