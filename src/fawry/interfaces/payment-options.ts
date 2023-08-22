@@ -5,7 +5,7 @@ export interface IFawrySignatureEncryptionParameters {
   price?: number;
   merchantRefNumber?: any;
   secureHashKey?: string;
-  userId?: number;
+  userId?: string;
   transactionId?: number;
   fawryRefNumber?: string;
   orderStatus?: string;
@@ -17,7 +17,20 @@ export interface FawryHeaders {
   Accept: string;
 }
 
-export class CreatePaymentLinkDTO {
+export interface User {
+  id: string;
+  phone: string;
+  email: string;
+  name: string;
+}
+
+export interface CreatePaymentLinkDTO {
+  price: number;
+  merchantRefNumber: any;
+  user: User;
+}
+
+export class CreateDummyPaymentLinkDTO {
   price: number;
   merchantRefNumber: any;
 }

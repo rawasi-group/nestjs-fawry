@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Config } from './interfaces/config';
 import {
+  CreateDummyPaymentLinkDTO,
   CreatePaymentLinkDTO,
   IFawrySignatureEncryptionParameters,
 } from './interfaces/payment-options';
@@ -12,7 +13,7 @@ import { fawryEndPoints } from './axios';
 export class FawryService {
   constructor(private readonly config: Config) {}
 
-  public async getDummyPaymentLink(createPaymentLinkDTO: CreatePaymentLinkDTO) {
+  public async getPaymentLink(createPaymentLinkDTO: CreatePaymentLinkDTO) {
     const signatureParams: IFawrySignatureEncryptionParameters = {
       merchantCode: this.config.merchantCode,
       itemCode: '11',
@@ -20,7 +21,49 @@ export class FawryService {
       price: createPaymentLinkDTO.price,
       merchantRefNumber: createPaymentLinkDTO.merchantRefNumber,
       secureHashKey: this.config.secureHashKey,
-      userId: 11,
+      userId: createPaymentLinkDTO.user.id,
+      transactionId: 11,
+      membershipId: '11',
+    };
+    const signature = this.prepareFawryV2SignatureSHA256(signatureParams);
+
+    const initPaymentParams = {
+      merchantCode: signatureParams.merchantCode,
+      merchantRefNum: signatureParams.merchantRefNumber,
+      customerMobile: createPaymentLinkDTO.user.phone,
+      customerEmail: createPaymentLinkDTO.user.email,
+      customerName: createPaymentLinkDTO.user.name,
+      customerProfileId: createPaymentLinkDTO.user.id,
+      chargeItems: [
+        {
+          itemId: signatureParams.itemCode,
+          description: 'Goal Name',
+          price: signatureParams.price,
+          quantity: signatureParams.quantity,
+        },
+      ],
+      returnUrl: this.config.fawryV2CheckoutPreview,
+      authCaptureModePayment: false,
+      signature: signature,
+    };
+    console.info(JSON.stringify(initPaymentParams));
+    const { data } = await FawryAxios.post(
+      fawryEndPoints.init_payment,
+      JSON.stringify(initPaymentParams),
+    );
+    return data;
+  }
+  public async getDummyPaymentLink(
+    createPaymentLinkDTO: CreateDummyPaymentLinkDTO,
+  ) {
+    const signatureParams: IFawrySignatureEncryptionParameters = {
+      merchantCode: this.config.merchantCode,
+      itemCode: '11',
+      quantity: '1',
+      price: createPaymentLinkDTO.price,
+      merchantRefNumber: createPaymentLinkDTO.merchantRefNumber,
+      secureHashKey: this.config.secureHashKey,
+      userId: '11',
       transactionId: 11,
       membershipId: '11',
     };
