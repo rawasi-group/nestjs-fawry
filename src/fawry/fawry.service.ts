@@ -21,7 +21,7 @@ export class FawryService {
       price: +createPaymentLinkDTO.price,
       merchantRefNumber: createPaymentLinkDTO.merchantRefNumber,
       secureHashKey: this.config.secureHashKey,
-      userId: createPaymentLinkDTO.user.id,
+      userId: '11',
       transactionId: 11,
       membershipId: '11',
     };
@@ -33,7 +33,7 @@ export class FawryService {
       customerMobile: createPaymentLinkDTO.user.phone,
       customerEmail: createPaymentLinkDTO.user.email,
       customerName: createPaymentLinkDTO.user.name,
-      customerProfileId: createPaymentLinkDTO.user.id,
+      customerProfileId: '11',
       chargeItems: [
         {
           itemId: signatureParams.itemCode,
