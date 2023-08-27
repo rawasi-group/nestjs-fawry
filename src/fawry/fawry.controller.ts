@@ -13,7 +13,7 @@ export class FawryController {
   @Get()
   findAll() {
     return this.fawryService.getDummyPaymentLink({
-      price: '20',
+      price: 20,
       merchantRefNumber: `${Math.floor(1000 + Math.random() * 9000)}`,
     });
   }
